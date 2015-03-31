@@ -6,7 +6,7 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/30 13:10:34 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 16:25:22 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 20:38:10 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,38 +58,32 @@ int				read_s32be(t_stream *stream, int32_t *nbr)
 	return (res);
 }
 
-char			*ft_strnjoinfree(char *a, char *b, size_t blen)
-{
-	char	*c;
-	char	*d;
-
-	d = ft_strsub(b, 0, blen); // Screw optimization
-	c = ft_strjoin(a, d);
-	free(a);
-	free(d);
-	return (c);
-}
-
-int				read_string(t_stream *stream, char **str)
+int				read_string(t_stream *stream, char **str, size_t *size)
 {
 	int		strsize;
 	int		striter;
 	int		oldstriter;
+	char	*tmp;
 
 	if (!read_s32be(stream, &strsize))
 		return (0);
-	striter = FT_MIN(stream->size - stream->cursor, (unsigned)strsize);
-	oldstriter = striter;
-	*str = ft_strsub(stream->buf, stream->cursor, striter);
+	*str = malloc(sizeof(char) * strsize);
+	tmp = *str;
+	striter = 0;
+	oldstriter = 0;
 	stream->cursor += striter;
-	while (striter < strsize && (fill_buf(stream), stream->size) > 0)
+	while (striter < strsize && stream->size > 0)
 	{
 		striter += FT_MIN(stream->size - stream->cursor, (unsigned)strsize - striter);
-		*str = ft_strnjoinfree(*str, stream->buf + stream->cursor,
-				striter - oldstriter);
+		ft_memmove(tmp, stream->buf + stream->cursor, striter - oldstriter);
+		tmp += striter - oldstriter;
 		stream->cursor += striter - oldstriter;
 		oldstriter = striter;
+		if (striter < strsize)
+			fill_buf(stream);
 	}
+	if (size != NULL)
+		*size = (size_t)strsize;
 	return (striter == strsize);
 }
 
@@ -105,12 +99,12 @@ int				write_s32be(t_stream *stream, int32_t nbr)
 	return (write(stream->fd, &nbr, sizeof(nbr)) >= 0);
 }
 
-int				write_string(t_stream *stream, char *s)
+int				write_string(t_stream *stream, char *s, size_t len)
 {
-	size_t	nbr;
-
 	if (s == NULL)
+	{
 		s = "";
-	return (write_s32be(stream, (nbr = ft_strlen(s))) &&
-			write(stream->fd, s, nbr) >= 0);
+		len = 0;
+	}
+	return (write_s32be(stream, len) && write(stream->fd, s, len) >= 0);
 }

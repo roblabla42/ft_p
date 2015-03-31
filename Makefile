@@ -6,7 +6,7 @@
 #    By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/03 11:25:08 by rlambert          #+#    #+#              #
-#    Updated: 2015/03/30 19:25:09 by roblabla         ###   ########.fr        #
+#    Updated: 2015/03/31 20:28:54 by roblabla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -34,10 +34,10 @@ libft/libft.a:
 .PHONY: libft/libft.a
 
 serveur: libft/libft.a $(SRV_OBJS)
-	$(CC) -o $@ $^ -Llibft/ -lft
+	$(CC) $(CFLAGS) -o $@ $^ -Llibft/ -lft
 
 client: libft/libft.a $(CLI_OBJS)
-	$(CC) -o $@ $^ -Llibft/ -lft
+	$(CC) $(CFLAGS) -o $@ $^ -Llibft/ -lft
 
 clean:
 	$(MAKE) -C libft/ clean

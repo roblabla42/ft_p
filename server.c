@@ -6,11 +6,12 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/29 01:25:24 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 18:11:45 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 20:39:14 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/socket.h>
+#include <fcntl.h>
 #include <netinet/in.h>
 #include <unistd.h>
 #include <stdio.h>
@@ -80,7 +81,7 @@ void	send_success(t_stream *stream, char *msg)
 {
 	if (!write_s8(stream, ACK))
 		ft_putendl("ERR");
-	if (!write_string(stream, msg))
+	if (!write_string(stream, msg, ft_strlen(msg)))
 		ft_putendl("ERR");
 }
 
@@ -88,7 +89,7 @@ void	send_failure(t_stream *stream, char *msg)
 {
 	if (!write_s8(stream, ERR))
 		ft_putendl("ERR");
-	if (!write_string(stream, msg))
+	if (!write_string(stream, msg, ft_strlen(msg)))
 		ft_putendl("ERR");
 }
 
@@ -96,7 +97,7 @@ int		handle_cd(t_stream *stream, t_state *state)
 {
 	char			*to;
 
-	if (!read_string(stream, &to))
+	if (!read_string(stream, &to, NULL))
 		return (0);
 	if (verify_cd(state->rootdir, to))
 		send_success(stream, "CD command");
@@ -142,7 +143,7 @@ int		handle_ls(t_stream *stream, t_state *state)
 	int				stdio[3];
 
 	(void)state;
-	if (!read_string(stream, &line))
+	if (!read_string(stream, &line, NULL))
 		return (0);
 	stdio[0] = -1;
 	stdio[1] = stream->fd;
@@ -160,7 +161,46 @@ int		handle_pwd(t_stream *stream, t_state *state)
 	(void)state;
 	if (getcwd(cwd, MAXPATHLEN) == NULL)
 		return (0);
-	write_string(stream, cwd);
+	write_string(stream, cwd, ft_strlen(cwd));
+	return (1);
+}
+
+int		handle_get(t_stream *stream, t_state *state)
+{
+	int		fd;
+	char	*line;
+	char	block[4096];
+	ssize_t	readres;
+
+	(void)state;
+	if (!read_string(stream, &line, NULL))
+		return (0);
+	fd = open(line, O_RDONLY);
+	while ((readres = read(fd, block, 4096)) > 0)
+	{
+		if (!write_string(stream, block, readres))
+			return (0);
+	}
+	if (!write_string(stream, "", 0))
+		return (0);
+	return (1);
+}
+
+int		handle_put(t_stream *stream, t_state *state)
+{
+	int		fd;
+	char	*line;
+	size_t	linesize;
+
+	(void)state;
+	if (!read_string(stream, &line, NULL))
+		return (0);
+	fd = open(line, O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR);
+	while (read_string(stream, &line, &linesize) && linesize > 0)
+	{
+		if (write(fd, line, linesize) < 0)
+			return (0);
+	}
 	return (1);
 }
 
@@ -182,12 +222,20 @@ void	handle_cmd(int cmd, t_stream *stream, t_state *state)
 		if (!handle_ls(stream, state))
 			handle_fail(stream, state);
 	}
-	/*else if (cmd == GET)
-		handle_get(stream);
+	else if (cmd == GET)
+	{
+		if (!handle_get(stream, state))
+			handle_fail(stream, state);
+	}
 	else if (cmd == PUT)
-		handle_put(stream);*/
+	{
+		if (!handle_put(stream, state))
+			handle_fail(stream, state);
+	}
 	else if (cmd == PWD)
+	{
 		handle_pwd(stream, state);
+	}
 	else if (cmd == QUIT)
 	{
 		send_success(stream, "Bye");

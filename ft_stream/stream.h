@@ -6,7 +6,7 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/29 15:08:23 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 16:26:00 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 20:34:30 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,11 @@ typedef struct	s_stream
 void			create_stream(int fd, t_stream *stream);
 int				read_s8(t_stream *stream, int8_t *c);
 int				read_s32be(t_stream *stream, int32_t *c);
-int				read_string(t_stream *stream, char **str);
+int				read_string(t_stream *stream, char **str, size_t *size);
 int				read_until(t_stream *stream, char **str, char c);
 int				write_s8(t_stream *stream, int8_t c);
 int				write_s32be(t_stream *stream, int32_t c);
-int				write_string(t_stream *stream, char *s);
+// TODO : Rename to write_buffer
+int				write_string(t_stream *stream, char *s, size_t size);
 int				write_line(t_stream *stream, char *s);
 #endif

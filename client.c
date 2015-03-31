@@ -6,9 +6,10 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/30 18:49:55 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 18:38:17 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 20:48:28 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+#include <stdio.h>
 #include <arpa/inet.h>
 #include <libft.h>
 #include <netdb.h>
@@ -46,7 +47,7 @@ int		read_result(t_stream *stream)
 	if (cmd == ACK || cmd == ERR)
 	{
 		ft_putstr(cmd == ACK ? "SUCCESS :" : "ERROR :");
-		if (!read_string(stream, &reason))
+		if (!read_string(stream, &reason, NULL))
 			return (0);
 		else
 			ft_putendl(reason);
@@ -63,6 +64,7 @@ int		handle_line(char *line, t_stream *stream)
 {
 	char	**cmd;
 	char	*lsres;
+	char	buf[4096];
 
 	cmd = ft_strsplitwith(line, " \t", NULL);
 	if (cmd[0] == NULL)
@@ -70,13 +72,13 @@ int		handle_line(char *line, t_stream *stream)
 	else if (ft_strequ(cmd[0], "cd"))
 	{
 		write_s8(stream, CD);
-		write_string(stream, cmd[1]);
+		write_string(stream, cmd[1], ft_strlen(cmd[1]));
 		return (read_result(stream));
 	}
 	else if (ft_strequ(cmd[0], "ls"))
 	{
 		write_s8(stream, LS);
-		write_string(stream, line);
+		write_string(stream, line, ft_strlen(line));
 		if (!read_until(stream, &lsres, '\0'))
 			return (0);
 		write(1, lsres, ft_strlen(lsres));
@@ -87,22 +89,38 @@ int		handle_line(char *line, t_stream *stream)
 			ft_putendl("Usage : get <path>");
 		else
 		{
+			size_t lssize;
 			write_s8(stream, GET);
-			write_string(stream, cmd[1]);
-			int newfile = open(cmd[1], O_WRONLY);
-			while (read_string(stream, &lsres) && ft_strlen(lsres) != 0)
-				write(newfile, lsres, ft_strlen(lsres));
+			write_string(stream, cmd[1], ft_strlen(cmd[1]));
+			int newfile;
+			if ((newfile = open(cmd[1], O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR)) < 0)
+				perror("newfile");
+			while (read_string(stream, &lsres, &lssize) && lssize != 0)
+			{
+				write(newfile, lsres, lssize);
+			}
 			close(newfile);
 		}
 	}
 	else if (ft_strequ(cmd[0], "put"))
 	{
-		write_s8(stream, PUT);
+		int		newfd;
+		int		size;
+		if (cmd[1] == NULL || (newfd = open(cmd[1], O_RDONLY)) < 0)
+			ft_putendl("Usage : put <path>");
+		else
+		{
+			write_s8(stream, PUT);
+			write_string(stream, cmd[1], ft_strlen(cmd[1]));
+			while ((size = read(newfd, buf, BUFSIZE)) > 0)
+				write_string(stream, buf, size);
+			write_string(stream, "", 0);
+		}
 	}
 	else if (ft_strequ(cmd[0], "pwd"))
 	{
 		write_s8(stream, PWD);
-		if (!read_string(stream, &lsres))
+		if (!read_string(stream, &lsres, NULL))
 			return (0);
 		ft_putendl(lsres);
 	}
