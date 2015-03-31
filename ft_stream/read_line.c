@@ -6,7 +6,7 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/30 19:20:34 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/30 19:24:23 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 16:25:26 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <libft.h>
 #include <stdlib.h>
 
-static ssize_t	ft_len_to_endline(int fd, t_stream *buf)
+static ssize_t	ft_len_to_endline(int fd, char c, t_stream *buf)
 {
 	char	*endline;
 	if (buf->cursor >= (size_t)buf->size)
@@ -26,7 +26,7 @@ static ssize_t	ft_len_to_endline(int fd, t_stream *buf)
 	}
 	if (buf->size <= 0)
 		return (-1);
-	endline = ft_memchr(buf->buf + buf->cursor, '\n', buf->size - buf->cursor);
+	endline = ft_memchr(buf->buf + buf->cursor, c, buf->size - buf->cursor);
 	if (endline == NULL)
 		return (-1);
 	else
@@ -53,12 +53,13 @@ static char	*ft_strnjoin(char *s1, const char *s2, size_t s2len)
 	}
 	return (new);
 }
-static char	*read_til_next_line(int fd, t_stream *buf)
+static char	*read_til_next_line(int fd, t_stream *buf, char c)
 {
 	char	*newstr;
 	ssize_t	len;
+
 	newstr = NULL;
-	while ((len = ft_len_to_endline(fd, buf)) == -1 && buf->size > 0)
+	while ((len = ft_len_to_endline(fd, c, buf)) == -1 && buf->size > 0)
 	{
 		newstr = ft_strnjoin(newstr, buf->buf + buf->cursor,
 				buf->size - buf->cursor);
@@ -75,9 +76,9 @@ static char	*read_til_next_line(int fd, t_stream *buf)
 	return (newstr);
 }
 
-int				read_line(t_stream *stream, char **str)
+int				read_until(t_stream *stream, char **str, char c)
 {
-	if ((*str = read_til_next_line(stream->fd, stream)) == NULL)
+	if ((*str = read_til_next_line(stream->fd, stream, c)) == NULL)
 	{
 		if (stream->size == 0)
 			return (0);

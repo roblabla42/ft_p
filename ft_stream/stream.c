@@ -6,7 +6,7 @@
 /*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/03/30 13:10:34 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/30 19:18:23 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/03/31 16:25:22 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,10 +49,10 @@ int				read_s32be(t_stream *stream, int32_t *nbr)
 	int8_t	*ptr;
 
 	ptr = (int8_t*)nbr;
-	int res =	read_s8(stream, ptr + 0 * 8)
-			&&	read_s8(stream, ptr + 1 * 8)
-			&&	read_s8(stream, ptr + 2 * 8)
-			&&	read_s8(stream, ptr + 3 * 8);
+	int res =	read_s8(stream, ptr + 0)
+			&&	read_s8(stream, ptr + 1)
+			&&	read_s8(stream, ptr + 2)
+			&&	read_s8(stream, ptr + 3);
 	if (res)
 		*nbr = (int32_t)ntohl(*nbr);
 	return (res);
@@ -78,7 +78,6 @@ int				read_string(t_stream *stream, char **str)
 
 	if (!read_s32be(stream, &strsize))
 		return (0);
-	fill_buf(stream);
 	striter = FT_MIN(stream->size - stream->cursor, (unsigned)strsize);
 	oldstriter = striter;
 	*str = ft_strsub(stream->buf, stream->cursor, striter);
@@ -94,26 +93,24 @@ int				read_string(t_stream *stream, char **str)
 	return (striter == strsize);
 }
 
-
 // TODO : proper error handling v
 int				write_s8(t_stream *stream, int8_t c)
 {
-	write(stream->fd, &c, 1);
-	return (0);
+	return (write(stream->fd, &c, 1) >= 0);
 }
 
 int				write_s32be(t_stream *stream, int32_t nbr)
 {
 	nbr = htonl(nbr);
-	write(stream->fd, &nbr, sizeof(nbr));
-	return (0);
+	return (write(stream->fd, &nbr, sizeof(nbr)) >= 0);
 }
 
 int				write_string(t_stream *stream, char *s)
 {
 	size_t	nbr;
 
-	write_s32be(stream, (nbr = ft_strlen(s)));
-	write(stream->fd, s, nbr);
-	return (0);
+	if (s == NULL)
+		s = "";
+	return (write_s32be(stream, (nbr = ft_strlen(s))) &&
+			write(stream->fd, s, nbr) >= 0);
 }
