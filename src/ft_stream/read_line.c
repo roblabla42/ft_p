@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_line.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
+/*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/03/30 19:20:34 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 16:25:26 by roblabla         ###   ########.fr       */
+/*   Created: 2015/04/01 18:59:05 by rlambert          #+#    #+#             */
+/*   Updated: 2015/04/02 19:52:04 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 static ssize_t	ft_len_to_endline(int fd, char c, t_stream *buf)
 {
 	char	*endline;
+
 	if (buf->cursor >= (size_t)buf->size)
 	{
 		buf->size = read(fd, buf->buf, BUFSIZE);
@@ -32,9 +33,11 @@ static ssize_t	ft_len_to_endline(int fd, char c, t_stream *buf)
 	else
 		return (endline - (buf->buf + buf->cursor));
 }
-static char	*ft_strnjoin(char *s1, const char *s2, size_t s2len)
+
+static char		*ft_strnjoin(char *s1, const char *s2, size_t s2len)
 {
 	char	*new;
+
 	if (s1 == NULL && s2 == NULL)
 		return (NULL);
 	if (s1 == NULL)
@@ -53,7 +56,8 @@ static char	*ft_strnjoin(char *s1, const char *s2, size_t s2len)
 	}
 	return (new);
 }
-static char	*read_til_next_line(int fd, t_stream *buf, char c)
+
+static char		*read_til_next_line(int fd, t_stream *buf, char c)
 {
 	char	*newstr;
 	ssize_t	len;

@@ -1,22 +1,24 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   server.h                                           :+:      :+:    :+:   */
+/*   protocol.h                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
+/*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/03/31 08:51:59 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 12:57:39 by roblabla         ###   ########.fr       */
+/*   Created: 2015/04/02 19:51:00 by rlambert          #+#    #+#             */
+/*   Updated: 2015/04/02 19:51:00 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef SERVER_H
-# define SERVER_H
-#include <sys/param.h>
-typedef struct	s_state
-{
-	int			id;
-	int			running;
-	char		rootdir[MAXPATHLEN];
-}				t_state;
+#ifndef PROTOCOL_H
+# define PROTOCOL_H
+
+# define ACK  'O'
+# define ERR  'K'
+# define CD   'C'
+# define LS   'L'
+# define GET  'G'
+# define PUT  'P'
+# define PWD  'W'
+# define QUIT 'Q'
 #endif

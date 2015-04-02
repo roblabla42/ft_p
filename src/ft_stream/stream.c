@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   stream.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
+/*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/03/30 13:10:34 by roblabla          #+#    #+#             */
-/*   Updated: 2015/03/31 20:38:10 by roblabla         ###   ########.fr       */
+/*   Created: 2015/04/02 19:23:36 by rlambert          #+#    #+#             */
+/*   Updated: 2015/04/02 23:44:39 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void			create_stream(int fd, t_stream *stream)
 	stream->size = read(fd, stream->buf, 4096);
 	stream->cursor = 0;
 }
-// Garantees at least one byte can be read, unless stream->size == 0.
+
 void			fill_buf(t_stream *stream)
 {
 	if (stream->size > 0 && (ssize_t)stream->cursor >= stream->size)
@@ -47,12 +47,13 @@ int				read_s8(t_stream *stream, int8_t *c)
 int				read_s32be(t_stream *stream, int32_t *nbr)
 {
 	int8_t	*ptr;
+	int		res;
 
 	ptr = (int8_t*)nbr;
-	int res =	read_s8(stream, ptr + 0)
-			&&	read_s8(stream, ptr + 1)
-			&&	read_s8(stream, ptr + 2)
-			&&	read_s8(stream, ptr + 3);
+	res = read_s8(stream, ptr + 0)
+			&& read_s8(stream, ptr + 1)
+			&& read_s8(stream, ptr + 2)
+			&& read_s8(stream, ptr + 3);
 	if (res)
 		*nbr = (int32_t)ntohl(*nbr);
 	return (res);
@@ -60,21 +61,21 @@ int				read_s32be(t_stream *stream, int32_t *nbr)
 
 int				read_string(t_stream *stream, char **str, size_t *size)
 {
-	int		strsize;
-	int		striter;
+	size_t	strsize;
+	size_t	striter;
 	int		oldstriter;
 	char	*tmp;
 
-	if (!read_s32be(stream, &strsize))
+	if (!read_s32be(stream, (int32_t*)&strsize))
 		return (0);
-	*str = malloc(sizeof(char) * strsize);
+	*str = malloc(sizeof(char) * (strsize + 1));
+	(*str)[strsize] = '\0';
 	tmp = *str;
 	striter = 0;
 	oldstriter = 0;
-	stream->cursor += striter;
 	while (striter < strsize && stream->size > 0)
 	{
-		striter += FT_MIN(stream->size - stream->cursor, (unsigned)strsize - striter);
+		striter += FT_MIN(stream->size - stream->cursor, strsize - striter);
 		ft_memmove(tmp, stream->buf + stream->cursor, striter - oldstriter);
 		tmp += striter - oldstriter;
 		stream->cursor += striter - oldstriter;
@@ -85,26 +86,4 @@ int				read_string(t_stream *stream, char **str, size_t *size)
 	if (size != NULL)
 		*size = (size_t)strsize;
 	return (striter == strsize);
-}
-
-// TODO : proper error handling v
-int				write_s8(t_stream *stream, int8_t c)
-{
-	return (write(stream->fd, &c, 1) >= 0);
-}
-
-int				write_s32be(t_stream *stream, int32_t nbr)
-{
-	nbr = htonl(nbr);
-	return (write(stream->fd, &nbr, sizeof(nbr)) >= 0);
-}
-
-int				write_string(t_stream *stream, char *s, size_t len)
-{
-	if (s == NULL)
-	{
-		s = "";
-		len = 0;
-	}
-	return (write_s32be(stream, len) && write(stream->fd, s, len) >= 0);
 }

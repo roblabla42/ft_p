@@ -6,21 +6,36 @@
 #    By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/03 11:25:08 by rlambert          #+#    #+#              #
-#    Updated: 2015/03/31 20:28:54 by roblabla         ###   ########.fr        #
+#    Updated: 2015/04/02 23:27:32 by rlambert         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-CFLAGS += -Wall -Wextra -Werror -Ilibft/include/
+CFLAGS += -Wall -Wextra -Werror -Ilibft/include/ -Iinclude/
 
-SRV_SRCS = server.c \
-           ft_stream/stream.c \
-           ft_stream/read_line.c
+SRV_SRCS = src/server.c \
+		   src/handlers_server/handle_cd.c \
+		   src/handlers_server/handle_cmd.c \
+		   src/handlers_server/handle_get.c \
+		   src/handlers_server/handle_ls.c \
+		   src/handlers_server/handle_put.c \
+		   src/handlers_server/handle_pwd.c \
+		   src/handlers_server/handle_quit.c \
+           src/ft_stream/stream.c \
+           src/ft_stream/write_stream.c \
+           src/ft_stream/read_line.c
 
 SRV_OBJS = $(SRV_SRCS:.c=.o)
 
-CLI_SRCS = client.c \
-           ft_stream/stream.c \
-           ft_stream/read_line.c
+CLI_SRCS = src/client.c \
+		   src/handlers_client/handle_cd.c \
+		   src/handlers_client/handle_get.c \
+		   src/handlers_client/handle_ls.c \
+		   src/handlers_client/handle_put.c \
+		   src/handlers_client/handle_pwd.c \
+		   src/handlers_client/handle_quit.c \
+           src/ft_stream/stream.c \
+           src/ft_stream/write_stream.c \
+           src/ft_stream/read_line.c
 
 CLI_OBJS = $(CLI_SRCS:.c=.o)
 
@@ -42,9 +57,12 @@ client: libft/libft.a $(CLI_OBJS)
 clean:
 	$(MAKE) -C libft/ clean
 	$(RM) $(SRV_OBJS)
+	$(RM) $(CLI_OBJS)
 
 fclean: clean
 	$(MAKE) -C libft/ fclean
-	$(RM) client server
+	$(RM) client serveur
 
 re: fclean all
+
+.PHONY: clean fclean re all
