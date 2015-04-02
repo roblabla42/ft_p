@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 19:23:36 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:44:39 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/02 23:51:21 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <unistd.h>
 #include "stream.h"
 #include <stdlib.h>
-#include <arpa/inet.h>
 
 void			create_stream(int fd, t_stream *stream)
 {
@@ -32,41 +31,14 @@ void			fill_buf(t_stream *stream)
 	}
 }
 
-int				read_s8(t_stream *stream, int8_t *c)
-{
-	fill_buf(stream);
-	if (stream->size <= 0)
-		return (0);
-	else
-	{
-		*c = stream->buf[stream->cursor++];
-		return (1);
-	}
-}
-
-int				read_s32be(t_stream *stream, int32_t *nbr)
-{
-	int8_t	*ptr;
-	int		res;
-
-	ptr = (int8_t*)nbr;
-	res = read_s8(stream, ptr + 0)
-			&& read_s8(stream, ptr + 1)
-			&& read_s8(stream, ptr + 2)
-			&& read_s8(stream, ptr + 3);
-	if (res)
-		*nbr = (int32_t)ntohl(*nbr);
-	return (res);
-}
-
 int				read_string(t_stream *stream, char **str, size_t *size)
 {
-	size_t	strsize;
-	size_t	striter;
-	int		oldstriter;
-	char	*tmp;
+	uint32_t	strsize;
+	uint32_t	striter;
+	int			oldstriter;
+	char		*tmp;
 
-	if (!read_s32be(stream, (int32_t*)&strsize))
+	if (!read_u32be(stream, &strsize))
 		return (0);
 	*str = malloc(sizeof(char) * (strsize + 1));
 	(*str)[strsize] = '\0';

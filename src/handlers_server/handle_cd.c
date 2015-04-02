@@ -6,13 +6,14 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:14:20 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:16:34 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/02 23:01:16 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "stream.h"
 #include "server.h"
 #include "protocol.h"
+#include <stdio.h>
 #include <libft.h>
 #include <unistd.h>
 

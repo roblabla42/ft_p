@@ -6,7 +6,7 @@
 #    By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2014/11/03 11:25:08 by rlambert          #+#    #+#              #
-#    Updated: 2015/04/02 23:27:32 by rlambert         ###   ########.fr        #
+#    Updated: 2015/04/02 23:52:00 by roblabla         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -22,6 +22,8 @@ SRV_SRCS = src/server.c \
 		   src/handlers_server/handle_quit.c \
            src/ft_stream/stream.c \
            src/ft_stream/write_stream.c \
+           src/ft_stream/read_signed.c \
+           src/ft_stream/read_unsigned.c \
            src/ft_stream/read_line.c
 
 SRV_OBJS = $(SRV_SRCS:.c=.o)
@@ -35,6 +37,8 @@ CLI_SRCS = src/client.c \
 		   src/handlers_client/handle_quit.c \
            src/ft_stream/stream.c \
            src/ft_stream/write_stream.c \
+           src/ft_stream/read_signed.c \
+           src/ft_stream/read_unsigned.c \
            src/ft_stream/read_line.c
 
 CLI_OBJS = $(CLI_SRCS:.c=.o)

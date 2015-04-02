@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:18:54 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:39:17 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/02 23:04:29 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 #include <libft.h>
 #include <unistd.h>
 #include <sys/wait.h>
+#include <sys/resource.h>
 #include <stdlib.h>
 
 static int	run_cmd(char *cmd, char **args, int stdio[3])

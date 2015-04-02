@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 19:51:07 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:27:54 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/02 23:40:39 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,11 @@ typedef struct	s_stream
 }				t_stream;
 
 void			create_stream(int fd, t_stream *stream);
+void			fill_buf(t_stream *stream);
 int				read_s8(t_stream *stream, int8_t *c);
 int				read_s32be(t_stream *stream, int32_t *c);
+int				read_u8(t_stream *stream, uint8_t *c);
+int				read_u32be(t_stream *stream, uint32_t *c);
 int				read_string(t_stream *stream, char **str, size_t *size);
 int				read_until(t_stream *stream, char **str, char c);
 int				write_s8(t_stream *stream, int8_t c);

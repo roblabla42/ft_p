@@ -6,13 +6,14 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:45:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 18:48:30 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/02 23:05:51 by roblabla         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <sys/types.h>
 #include <stdlib.h>
 #include <libft.h>
+#include <stdio.h>
 #include <fcntl.h>
 #include <unistd.h>
 #include "protocol.h"
