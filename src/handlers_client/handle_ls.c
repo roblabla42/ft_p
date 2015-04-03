@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:49:56 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 16:08:31 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 19:04:32 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ int		handle_ls(t_stream *stream, char *line, char **cmd)
 	write_string(stream, line, ft_strlen(line));
 	if (!read_until(stream, &lsres, '\0'))
 		return (0);
-	write(1, lsres, ft_strlen(lsres));
+	ft_putendl("SUCCESS");
+	ft_putstr(lsres);
 	return (1);
 }

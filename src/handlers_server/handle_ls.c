@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:18:54 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:04:29 by roblabla         ###   ########.fr       */
+/*   Updated: 2015/04/03 21:37:16 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,12 @@ int			handle_ls(t_stream *stream, t_state *state)
 	int				stdio[3];
 
 	(void)state;
-	ft_putendl("Reading dir");
 	if (!read_string(stream, &line, NULL))
-	{
-		ft_putendl("FAIL");
 		return (0);
-	}
-	ft_putendl(line);
 	stdio[0] = -1;
 	stdio[1] = stream->fd;
 	stdio[2] = -1;
 	args = ft_strsplitwith(line, " \t", NULL);
-	ft_putendl("Redirecting output");
 	run_cmd("/bin/ls", args, stdio);
-	ft_putendl("Finished handling ls");
 	return (1);
 }

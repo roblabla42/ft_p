@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:22:47 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 19:22:29 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 21:20:00 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ static int	read_result(t_stream *stream)
 		return (0);
 	if (cmd == ACK || cmd == ERR)
 	{
-		ft_putstr(cmd == ACK ? "SUCCESS :" : "ERROR :");
+		ft_putstr(cmd == ACK ? "SUCCESS: " : "ERROR: ");
 		if (!read_string(stream, &reason, NULL))
 			return (0);
 		else

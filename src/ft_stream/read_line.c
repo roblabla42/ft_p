@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/01 18:59:05 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 19:52:04 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 21:17:33 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,7 @@ static char		*read_til_next_line(int fd, t_stream *buf, char c)
 int				read_until(t_stream *stream, char **str, char c)
 {
 	if ((*str = read_til_next_line(stream->fd, stream, c)) == NULL)
-	{
-		if (stream->size == 0)
-			return (0);
-		else
-			return (-1);
-	}
+		return (0);
 	else
 		return (1);
 }
