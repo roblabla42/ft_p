@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:45:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 22:41:10 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 23:04:43 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ static int	pipefile(t_stream *stream, char **cmd)
 	return (1);
 }
 
-int		handle_get(t_stream *stream, char *line, char **cmd)
+int			handle_get(t_stream *stream, char *line, char **cmd)
 {
 	int8_t	res;
 	char	*resstr;
@@ -63,10 +63,7 @@ int		handle_get(t_stream *stream, char *line, char **cmd)
 				ft_putendl("SUCCESS");
 		}
 		else if (readres && read_string(stream, &resstr, NULL))
-		{
-			ft_putstr("ERROR: ");
-			ft_putendl(resstr);
-		}
+			(ft_putstr("ERROR: "), ft_putendl(resstr));
 		else
 			return (0);
 	}

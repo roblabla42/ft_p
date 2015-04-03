@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 19:51:39 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 17:27:08 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 23:06:17 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,14 +28,11 @@ int		setup_sock(struct sockaddr_in *srvaddr, int port)
 	int	srvfd;
 	int	yes;
 
-	if ((srvfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+	yes = 1;
+	if ((srvfd = socket(AF_INET, SOCK_STREAM, 0)) < 0
+		|| setsockopt(srvfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) < 0)
 	{
 		ft_putendl("Socket error");
-		return (-1);
-	}
-	if (setsockopt(srvfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) < 0)
-	{
-		ft_putendl("sockopt error");
 		return (-1);
 	}
 	ft_bzero(srvaddr, sizeof(*srvaddr));
@@ -56,7 +53,7 @@ void	send_failure(t_stream *stream, char *msg)
 {
 	if (!write_s8(stream, ERR))
 		ft_putendl("ERR");
-	if (!write_string(stream, msg, ft_strlen(msg)))
+	if (!write_string(stream, msg, msg == NULL ? 0 : ft_strlen(msg)))
 		ft_putendl("ERR");
 }
 

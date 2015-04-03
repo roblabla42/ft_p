@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:49:05 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 22:41:24 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:52:11 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 #include "stream.h"
 #include "protocol.h"
 
-int	read_result(t_stream *stream)
+int			read_result(t_stream *stream)
 {
 	int8_t	cmd;
 	char	*reason;
