@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/01 20:22:44 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 20:17:34 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 17:45:37 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,7 +72,7 @@ void	do_loop(t_stream *stream, t_stream *in)
 				&& handle_line(line, stream))
 	{
 		free(line);
-		ft_putstr("> ");
+		ft_putstr("ft_p> ");
 	}
 }
 
@@ -92,7 +92,7 @@ int		main(int argc, char **argv)
 		ft_putendl("An error has occured while creating the client");
 		return (1);
 	}
-	ft_putstr("Connecting to port 3000\n> ");
+	ft_putstr("Connecting to port 3000\nft_p> ");
 	stream = (t_stream){ .fd = clifd, .size = 1, .cursor = 1 };
 	create_stream(1, &in);
 	do_loop(&stream, &in);
