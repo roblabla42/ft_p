@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 19:51:39 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:26:43 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 17:27:08 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 #include <fcntl.h>
 #include <netinet/in.h>
 #include <unistd.h>
-#include <stdio.h>
 #include <libft.h>
 #include <stdlib.h>
 #include "server.h"
@@ -45,7 +44,7 @@ int		setup_sock(struct sockaddr_in *srvaddr, int port)
 	srvaddr->sin_port = htons(port);
 	if (bind(srvfd, (struct sockaddr *)srvaddr, sizeof(*srvaddr)) < 0)
 	{
-		perror("Bind error");
+		ft_putendl("Bind error");
 		return (-1);
 	}
 	if (listen(srvfd, 5) < 0)
@@ -100,7 +99,7 @@ int		handle_cli(int srvfd, int clifd)
 		return (0);
 	}
 	else if (pid < 0)
-		perror("fork");
+		ft_putendl("Fork error");
 	else
 		close(clifd);
 	return (1);
@@ -125,7 +124,7 @@ int		main(int argc, char **argv)
 		clilen = sizeof(cliaddr);
 		if ((clifd = accept(srvfd, (struct sockaddr*)&cliaddr, &clilen)) < 0)
 		{
-			perror("accept");
+			ft_putendl("Accept error");
 			return (1);
 		}
 		if (handle_cli(srvfd, clifd) == 0)
