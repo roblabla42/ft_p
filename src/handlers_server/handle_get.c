@@ -6,13 +6,14 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:17:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/02 23:18:00 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 17:55:06 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "server.h"
 #include <fcntl.h>
 #include <unistd.h>
+#include <libft.h>
 
 int		handle_get(t_stream *stream, t_state *state)
 {
@@ -24,7 +25,13 @@ int		handle_get(t_stream *stream, t_state *state)
 	(void)state;
 	if (!read_string(stream, &line, NULL))
 		return (0);
-	fd = open(line, O_RDONLY);
+	if ((fd = open(line, O_RDONLY)) < 0)
+	{
+		write_s8(stream, 0);
+		write_string(stream, "No such file or directory", 25);
+		return (1);
+	}
+	write_s8(stream, 1);
 	while ((readres = read(fd, block, 4096)) > 0)
 	{
 		if (!write_string(stream, block, readres))
