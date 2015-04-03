@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   read_signed.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: roblabla </var/spool/mail/roblabla>        +#+  +:+       +#+        */
+/*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2015/04/02 23:29:24 by roblabla          #+#    #+#             */
-/*   Updated: 2015/04/02 23:40:41 by roblabla         ###   ########.fr       */
+/*   Created: 2015/04/03 16:06:10 by rlambert          #+#    #+#             */
+/*   Updated: 2015/04/03 16:06:11 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,5 +39,3 @@ int				read_s32be(t_stream *stream, int32_t *nbr)
 		*nbr = (int32_t)ntohl(*nbr);
 	return (res);
 }
-
-
