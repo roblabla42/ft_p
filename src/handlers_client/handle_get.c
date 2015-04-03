@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:45:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 18:56:37 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:41:10 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static int	pipefile(t_stream *stream, char **cmd)
 		free(tmp);
 	}
 	if (!readres)
-	{
-		ft_putendl("ERROR: connection closed");
 		return (0);
-	}
 	close(newfile);
 	return (1);
 }

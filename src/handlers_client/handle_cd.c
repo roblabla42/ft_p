@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:49:05 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 18:50:16 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:41:24 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,7 @@ int	read_result(t_stream *stream)
 			ft_putendl(reason);
 	}
 	else
-	{
-		ft_putendl("ERROR: Protocol");
 		return (0);
-	}
 	return (1);
 }
 
@@ -47,9 +44,6 @@ int			handle_cd(t_stream *stream, char *line, char **cmd)
 	}
 	if (!write_s8(stream, CD)
 			|| !write_string(stream, cmd[1], ft_strlen(cmd[1])))
-	{
-		ft_putendl("ERROR: Server closed");
 		return (0);
-	}
 	return (read_result(stream));
 }

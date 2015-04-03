@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/01 20:22:44 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 17:45:37 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:40:00 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int		setup_sock(char *host, int port)
 		return (clifd);
 }
 
-int		handle_line(char *line, t_stream *stream)
+int		handle_line(char *line, t_stream *stream, int *running)
 {
 	char	**cmd;
 
@@ -57,7 +57,7 @@ int		handle_line(char *line, t_stream *stream)
 	else if (ft_strequ(cmd[0], "pwd"))
 		return (handle_pwd(stream, line, cmd));
 	else if (ft_strequ(cmd[0], "quit"))
-		return (handle_quit(stream, line, cmd));
+		return (handle_quit(stream, line, cmd, running));
 	else
 		ft_putendl("Unknown command");
 	return (1);
@@ -66,14 +66,17 @@ int		handle_line(char *line, t_stream *stream)
 void	do_loop(t_stream *stream, t_stream *in)
 {
 	char	*line;
-	int		res;
+	int		running;
 
-	while ((res = read_until(in, &line, '\n')) > 0
-				&& handle_line(line, stream))
+	running = 1;
+	while (running && read_until(in, &line, '\n') > 0
+				&& handle_line(line, stream, &running))
 	{
 		free(line);
 		ft_putstr("ft_p> ");
 	}
+	if (running)
+		ft_putendl("ERROR: Protocol Error");
 }
 
 int		main(int argc, char **argv)

@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:22:47 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 21:20:00 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:40:39 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,18 +30,16 @@ static int	read_result(t_stream *stream)
 			ft_putendl(reason);
 	}
 	else
-	{
-		ft_putendl("PROTOCOL ERROR");
 		return (0);
-	}
 	return (1);
 }
 
-int			handle_quit(t_stream *stream, char *line, char **cmd)
+int			handle_quit(t_stream *stream, char *line, char **cmd, int *run)
 {
 	(void)line;
 	(void)cmd;
+	*run = 0;
 	write_s8(stream, QUIT);
 	read_result(stream);
-	return (0);
+	return (1);
 }

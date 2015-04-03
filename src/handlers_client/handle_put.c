@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 19:16:36 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 21:20:21 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/03 22:40:56 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,7 @@ int		send_preamble(t_stream *stream, char **cmd)
 	write_s8(stream, PUT);
 	write_string(stream, cmd[1], ft_strlen(cmd[1]));
 	if (!read_s8(stream, &res))
-	{
-		ft_putendl("ERROR: Protocol error");
 		return (0);
-	}
 	else if (!res)
 	{
 		read_string(stream, &resstr, NULL);
