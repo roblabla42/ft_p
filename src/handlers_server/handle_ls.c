@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:18:54 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/04 04:13:55 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/04 06:55:30 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,9 @@ int			handle_ls(t_stream *stream, t_state *state)
 		return (0);
 	stdio[0] = -1;
 	stdio[1] = stream->fd;
-	stdio[2] = -1;
+	stdio[2] = stream->fd;
 	args = ft_strsplitwith(line, " \t", NULL);
-	i = 0;
+	i = 1;
 	while (args[i] != NULL)
 	{
 		if (ft_strstr(args[i], "..") || args[i][0] == '/')
