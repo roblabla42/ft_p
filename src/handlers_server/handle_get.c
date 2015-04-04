@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:17:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 21:48:13 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/04 02:04:19 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,8 @@ int		handle_get(t_stream *stream, t_state *state)
 	(void)state;
 	if (!read_string(stream, &line, NULL))
 		return (0);
-	if ((fd = open(line, O_RDONLY)) < 0 || !verify(fd))
+	if (*line == '/' || ft_strstr(line, "..") != NULL
+					|| (fd = open(line, O_RDONLY)) < 0 || !verify(fd))
 	{
 		write_s8(stream, 0);
 		write_string(stream, "No such file or directory", 25);

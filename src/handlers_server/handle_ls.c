@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 23:18:54 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 21:37:16 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/04 04:13:55 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,10 +37,7 @@ static int	run_cmd(char *cmd, char **args, int stdio[3])
 		exit(1);
 	}
 	else
-	{
 		wait4(pid, &status, 0, &usage);
-		write(stdio[1], "\0", 1);
-	}
 	return (1);
 }
 
@@ -49,6 +46,7 @@ int			handle_ls(t_stream *stream, t_state *state)
 	char			*line;
 	char			**args;
 	int				stdio[3];
+	int				i;
 
 	(void)state;
 	if (!read_string(stream, &line, NULL))
@@ -57,6 +55,14 @@ int			handle_ls(t_stream *stream, t_state *state)
 	stdio[1] = stream->fd;
 	stdio[2] = -1;
 	args = ft_strsplitwith(line, " \t", NULL);
+	i = 0;
+	while (args[i] != NULL)
+	{
+		if (ft_strstr(args[i], "..") || args[i][0] == '/')
+			args[i] = "";
+		i++;
+	}
 	run_cmd("/bin/ls", args, stdio);
+	write(stdio[1], "\0", 1);
 	return (1);
 }

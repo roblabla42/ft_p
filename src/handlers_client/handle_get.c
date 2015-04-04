@@ -6,7 +6,7 @@
 /*   By: rlambert <rlambert@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2015/04/02 18:45:41 by rlambert          #+#    #+#             */
-/*   Updated: 2015/04/03 23:04:43 by rlambert         ###   ########.fr       */
+/*   Updated: 2015/04/04 01:59:04 by rlambert         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,10 @@ static int	pipefile(t_stream *stream, char **cmd)
 	int		newfile;
 	int		readres;
 
-	if ((newfile = open(cmd[1],
+	tmp = cmd[1];
+	while (ft_strchr(tmp, '/') != NULL)
+		tmp = ft_strchr(tmp, '/') + 1;
+	if ((newfile = open(tmp,
 					O_WRONLY | O_CREAT, S_IRUSR | S_IWUSR)) < 0)
 	{
 		ft_putendl("ERROR: Error opening file");
